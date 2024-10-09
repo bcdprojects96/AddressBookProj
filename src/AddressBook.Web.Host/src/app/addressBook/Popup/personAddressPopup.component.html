@@ -1,0 +1,16 @@
+﻿<form class="form-horizontal p-4 bg-light rounded"
+      autocomplete="off"
+      #addEditInvestment="ngForm"
+      (ngSubmit)="save()">
+    <abp-modal-header [title]="person.firstName + ' ' + person.lastName" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-8 d-flex flex-column justify-content-end align-items-center" style="min-height: 150px;">
+                <!-- Flexbox for vertical centering -->
+                <h5 class="font-weight-bold">Address</h5>
+                <p class="text-muted">{{person.address}}</p>
+            </div>
+        </div>
+    </div>
+</form>
