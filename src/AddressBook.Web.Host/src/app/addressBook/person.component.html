@@ -2,10 +2,12 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-2">
                     <h1>{{ "Address Book"}}</h1>
+
                 </div>
             </div>
+
         </div>
 
         <p-table [value]="personList">
@@ -31,7 +33,23 @@
                 </tr>
             </ng-template>
         </p-table>
-
+        <div class="row">
+            <div class="col-lg-4">
+                <button pButton
+                        pRipple
+                        class="p-button-label"
+                        (click)="getHardCodedPersonList()">
+                    Hard Coded List
+                </button>
+                &nbsp;
+                <button pButton
+                        pRipple
+                        class="p-button-label"
+                        (click)="getDatabasePersonList()">
+                    Database List
+                </button>
+            </div>
+        </div>
 
     </section>
 

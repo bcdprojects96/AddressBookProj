@@ -19,11 +19,17 @@ export class PersonComponent extends AppComponentBase {
     }
 
     ngOnInit() {
-        this.getPersonList();
+        this.getHardCodedPersonList();
     }
 
-    getPersonList() {
-        this._personService.getPersonList().subscribe(result => {
+    getHardCodedPersonList() {
+        this._personService.getHardCodedPersonList().subscribe(result => {
+            this.personList = result;
+        })
+    }
+
+    getDatabasePersonList() {
+        this._personService.getDatabasePersonList().subscribe(result => {
             this.personList = result;
         })
     }
@@ -41,9 +47,6 @@ export class PersonComponent extends AppComponentBase {
             }
         );
 
-        personAddressPopup.content.onSave.subscribe(() => {
-            this.getPersonList();
-        });
     }
 
 }

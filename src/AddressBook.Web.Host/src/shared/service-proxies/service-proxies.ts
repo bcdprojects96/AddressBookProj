@@ -218,8 +218,8 @@ export class PersonServiceProxy {
     /**
      * @return Success
      */
-    getPersonList(): Observable<PersonDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Person/GetPersonList";
+    getHardCodedPersonList(): Observable<PersonDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Person/GetHardCodedPersonList";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -231,11 +231,11 @@ export class PersonServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetPersonList(response_);
+            return this.processGetHardCodedPersonList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetPersonList(<any>response_);
+                    return this.processGetHardCodedPersonList(<any>response_);
                 } catch (e) {
                     return <Observable<PersonDto[]>><any>_observableThrow(e);
                 }
@@ -244,7 +244,65 @@ export class PersonServiceProxy {
         }));
     }
 
-    protected processGetPersonList(response: HttpResponseBase): Observable<PersonDto[]> {
+    protected processGetHardCodedPersonList(response: HttpResponseBase): Observable<PersonDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(PersonDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PersonDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getDatabasePersonList(): Observable<PersonDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Person/GetDatabasePersonList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDatabasePersonList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDatabasePersonList(<any>response_);
+                } catch (e) {
+                    return <Observable<PersonDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PersonDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDatabasePersonList(response: HttpResponseBase): Observable<PersonDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
