@@ -13,7 +13,7 @@ It is made based on ASP.NET Boilerplate, which is an open-source framework that 
 # Instructions
 
 1. By using a terminal window, navigate to the folder where you want to install the application.
-2. Run the following command: git clone https://github.com/username/repository_name.git
+2. Run the following command: git clone https://github.com/bcdprojects96/AddressBookProj.git
 3. Navigate to "AddressBookProj\src\AddressBook.Web.Host"
 4. Run npm ci --legacy-peer-deps
 5. Run ng serve and leave the window open
